@@ -265,10 +265,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-06-26 19:10:29 / Modified: 20:05:51" itemprop="dateCreated datePublished" datetime="2021-06-26T19:10:29+08:00">2021-06-26</time>
+              <time title="Created: 2021-06-26 19:10:29" itemprop="dateCreated datePublished" datetime="2021-06-26T19:10:29+08:00">2021-06-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-06-27 16:49:06" itemprop="dateModified" datetime="2021-06-27T16:49:06+08:00">2021-06-27</time>
+              </span>
 
           
 
@@ -293,6 +299,17 @@
 <p>The linker puts sections into segments;</p>
 <p><img src="/images/elf_link_vs_exec_view.jpg"></p>
 <h2 id="Relaction-between-heap-amp-stack-in-C-with-ELF-object-file"><a href="#Relaction-between-heap-amp-stack-in-C-with-ELF-object-file" class="headerlink" title="Relaction between heap&amp;stack in C++ with ELF object file?"></a>Relaction between heap&amp;stack in C++ with ELF object file?</h2><h2 id="Relocatable-ELF"><a href="#Relocatable-ELF" class="headerlink" title="Relocatable ELF"></a>Relocatable ELF</h2><p>If an ELF object is relocatable, it can be loaded into several different processes at different virtual spaces.</p>
+<h2 id="How-to-check-if-an-ELF-object-contains-debugging-symbols"><a href="#How-to-check-if-an-ELF-object-contains-debugging-symbols" class="headerlink" title="How to check if an ELF object contains debugging symbols?"></a>How to check if an ELF object contains debugging symbols?</h2><p>Read its sections headers to see if it has sections with the name of *.debug.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -h object_file | grep debug</span><br></pre></td></tr></table></figure>
+<p>If it contains debugging info, we will get</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">29 .debug_aranges 00019ac0  0000000000000000  0000000000000000  0009244a  2**0</span><br><span class="line">30 .debug_info   001bcc5f  0000000000000000  0000000000000000  000abf0a  2**0</span><br><span class="line">31 .debug_abbrev 0000f766  0000000000000000  0000000000000000  00268b69  2**0</span><br><span class="line">32 .debug_line   0004d576  0000000000000000  0000000000000000  002782cf  2**0</span><br><span class="line">33 .debug_str    00112f44  0000000000000000  0000000000000000  002c5845  2**0</span><br><span class="line">34 .debug_ranges 0001a9d0  0000000000000000  0000000000000000  003d8789  2**0</span><br></pre></td></tr></table></figure>
+
+<p>Or, we can use <code>readelf</code> to obtain these info as well.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readelf -S object_file | grep debug</span><br></pre></td></tr></table></figure>
+<p>We can also get:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[30] .debug_aranges    PROGBITS         0000000000000000  0009244a</span><br><span class="line">[31] .debug_info       PROGBITS         0000000000000000  000abf0a</span><br><span class="line">[32] .debug_abbrev     PROGBITS         0000000000000000  00268b69</span><br><span class="line">[33] .debug_line       PROGBITS         0000000000000000  002782cf</span><br><span class="line">[34] .debug_str        PROGBITS         0000000000000000  002c5845</span><br><span class="line">[35] .debug_ranges     PROGBITS         0000000000000000  003d8789</span><br></pre></td></tr></table></figure>
+
+<p>If the output is empty, we can ensure that object_file is released without debugging info.</p>
 
       
     </div>
